@@ -7,11 +7,6 @@ git clone https://github.com/Daschle-Newberry/WebCasino
 ```
 git remote add origin https://github.com/Daschle-Newberry/WebCasino
 ```
-or on linux with SSH
-
-```
-git remote add orgin git@github:Daschle-Newberry/WebCasino.git
-```
 3. Create a new local branch
 ```
 git branch -m Your-Name
@@ -20,7 +15,6 @@ git branch -m Your-Name
 5. Make sure to add yourself to the issue, and set a time estimate (if you want).
 6. When ready, commit your code to your branch<br>
 ```
-git checkout Your-Name
 git add *
 git status
 git commit -m "message"
@@ -37,6 +31,11 @@ git push origin main
 ***Please make sure to discuss any merge conflicts with the team***
 
 ***Always pull and merge main into your current working branch before working on your code to ensure you are up to date.***
+```
+git checkout Your-Name
+git fetch origin
+git merge origin/main
+```
 
 ## Running the Project
 1. Start the webserver
