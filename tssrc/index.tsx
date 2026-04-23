@@ -27,6 +27,7 @@ root.render(
             <Routes>
                 <Route path="/" element={<App/>}/>
                 <Route path="/game1" element={<Game1/>}/>
+                <h1>LELLE</h1>
             </Routes>
         </BrowserRouter>
     </StrictMode>
