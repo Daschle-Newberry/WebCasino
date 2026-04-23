@@ -1,14 +1,14 @@
 import React, { StrictMode, Component, ReactNode } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createRoot } from "react-dom/client";
-import { Game1 } from "./games/game1"
+import { BlackJack } from "./games/blackjack"
 import "./styles/index.css"
 
 class App extends Component {
     override render(): ReactNode {
         return <div>
-                    <a href = "/game1">Click here!</a>
-            <p id = "welcome-message">welcome to my web app.</p>
+            <p id = "welcome-message">Awesome Fucking Casino!</p>
+            <p><a href = "/blackjack">Blackjack</a></p>
         </div>
     }
 }
@@ -26,8 +26,7 @@ root.render(
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<App/>}/>
-                <Route path="/game1" element={<Game1/>}/>
-                <h1>LELLE</h1>
+                <Route path="/blackjack" element={<BlackJack/>}/>
             </Routes>
         </BrowserRouter>
     </StrictMode>
