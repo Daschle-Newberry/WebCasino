@@ -1,0 +1,9 @@
+/* Feel free to modify this css, keep it mind it applies to the whole page and everyone's games*/
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}

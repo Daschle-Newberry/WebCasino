@@ -5,6 +5,7 @@ import { BlackJack } from "./games/blackjack/Blackjack"
 import { MainMenu, MenuButton } from "./menu/MainMenu";
 import { Roulette } from "./games/roulette/roulette";
 
+import "./global.module.css";
 
 const rootElem = document.getElementById('root');
 
