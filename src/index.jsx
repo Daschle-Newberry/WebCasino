@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createRoot } from "react-dom/client";
 import { BlackJack } from "./games/blackjack/Blackjack";
 import { MainMenu, MenuButton } from "./menu/MainMenu";
+import { Roulette } from "./games/roulette/roulette";
 const rootElem = document.getElementById('root');
 if (rootElem == null) {
     throw new Error("No root element found in HTML file.");
@@ -18,6 +19,7 @@ root.render(<StrictMode>
                         <MenuButton text="Game3" link="/game3"/>
                     </MainMenu>}/>
                 <Route path="/blackjack" element={<BlackJack />}/>
+                <Route path="/roulette" element={<Roulette />}/>
             </Routes>
         </BrowserRouter>
     </StrictMode>);

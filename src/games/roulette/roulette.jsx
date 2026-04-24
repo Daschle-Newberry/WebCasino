@@ -1,25 +1,24 @@
-import React, { StrictMode, Component } from "react";
-import { createRoot } from "react-dom/client";
+import React from "react";
 import { useState } from "react";
 import styles from "./roulette.module.css";
 { /* https://www.typescriptlang.org/docs/handbook/jsx.html#value-based-elements */ }
 const Square2 = (value) => {
     const [selected, setSelected] = useState(Boolean);
-    const [style, setStyle] = useState("square");
+    const [style, setStyle] = useState(styles.square);
     const standardStyle = () => {
         if (value.value % 2 > 0) {
-            setStyle("redSquare");
+            setStyle(styles.redSquare);
         }
         else {
-            setStyle("blackSquare");
+            setStyle(styles.blackSquare);
         }
     };
     const changeStyle = () => {
-        if (style == "selected") {
+        if (style === styles.selected) {
             standardStyle();
         }
         else {
-            setStyle("selected");
+            setStyle(styles.selected);
         }
         ;
     };
@@ -28,16 +27,16 @@ const Square2 = (value) => {
         // set color blue (?)
         // add/remove from list of values to be submitted
         // changeStyle();
-        if (selected == true) {
+        if (selected === true) {
             setSelected(false);
         }
-        else if (selected == false) {
+        else if (selected === false) {
             setSelected(true);
         }
         changeStyle();
         console.log('clicked', value, selected, style);
     }
-    if (style == "square") {
+    if (style === styles.square) {
         standardStyle();
         return (<button className={style} onClick={handleClick}>
                 {value.value}
@@ -81,9 +80,8 @@ class SquareState {
         this.selected = false;
     }
 }
-export class Roulette extends Component {
-    render() {
-        return (<div className={styles["roulette-main-page"]}>
+export function Roulette() {
+    return (<div className={styles["roulette-main-page"]}>
 
             <p>Welcome to the Roulette table!</p>
 
@@ -133,13 +131,14 @@ export class Roulette extends Component {
             </div>
         </div>
         </div>);
-    }
 }
-const rootElem = document.getElementById('root');
-if (rootElem == null) {
-    alert('you forgot to put a root element in your HTML file.');
-}
-const root = createRoot(rootElem);
-root.render(<StrictMode>
-        <Roulette />
-    </StrictMode>);
+// const rootElem = document.getElementById('root');
+// if( rootElem == null ) {
+//     alert('you forgot to put a root element in your HTML file.');
+// }
+// const root = createRoot( rootElem as HTMLElement );
+// root.render(
+//     <StrictMode>
+//         <Roulette/>
+//     </StrictMode>
+// );

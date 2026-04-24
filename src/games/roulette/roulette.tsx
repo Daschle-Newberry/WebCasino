@@ -8,16 +8,16 @@ import styles from "./roulette.module.css"
 
 const Square2 = (value : {value: number}) => {
     const [selected, setSelected] = useState(Boolean);
-    const [style, setStyle] = useState("square");
+    const [style, setStyle] = useState(styles.square);
 
     const standardStyle = () => {
-        if(value.value % 2 > 0){setStyle("redSquare");}   
-        else {setStyle("blackSquare");}
+        if(value.value % 2 > 0){setStyle(styles.redSquare);}   
+        else {setStyle(styles.blackSquare);}
     }
 
     const changeStyle = () => {
-        if(style == "selected"){standardStyle();}
-        else{setStyle("selected")};
+        if(style === styles.selected){standardStyle();}
+        else{setStyle(styles.selected)};
     }
 
     function handleClick(){
@@ -27,10 +27,10 @@ const Square2 = (value : {value: number}) => {
         
         // changeStyle();
 
-        if(selected == true){
+        if(selected === true){
             setSelected(false);
         }
-        else if(selected == false){
+        else if(selected === false){
             setSelected(true);
         }
         
@@ -38,7 +38,7 @@ const Square2 = (value : {value: number}) => {
         console.log('clicked', value, selected, style);
     }
 
-    if(style == "square"){
+    if(style === styles.square){
         standardStyle();
         return (
         <button 
@@ -93,8 +93,7 @@ class SquareState{
     selected : boolean = false;
 }
 
-export class Roulette extends Component{
-    override render(): ReactNode{
+export function Roulette() {
         return(
         <div className={styles["roulette-main-page"]}>
 
@@ -148,18 +147,17 @@ export class Roulette extends Component{
         </div>
         );
     }
-}
 
-const rootElem = document.getElementById('root');
+// const rootElem = document.getElementById('root');
 
-if( rootElem == null ) {
-    alert('you forgot to put a root element in your HTML file.');
-}
+// if( rootElem == null ) {
+//     alert('you forgot to put a root element in your HTML file.');
+// }
 
-const root = createRoot( rootElem as HTMLElement );
+// const root = createRoot( rootElem as HTMLElement );
 
-root.render(
-    <StrictMode>
-        <Roulette/>
-    </StrictMode>
-);
+// root.render(
+//     <StrictMode>
+//         <Roulette/>
+//     </StrictMode>
+// );
