@@ -1,6 +1,6 @@
 /**https://react.dev/learn/tutorial-tic-tac-toe#adding-time-travel*/
 
-/* html {
+html {
   background-color: rgba(20, 121, 40, 0.8);
 }
 
@@ -12,23 +12,9 @@ body {
 
   margin: 0;
   /* padding: 40px; */
-  /*
   height: 100%;
   width: 100%;
   overflow: hidden;
-  background-color: rgba(20, 121, 40, 0.8);
-} */
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-
-  display: flex;
-  justify-content: center;
   background-color: rgba(20, 121, 40, 0.8);
 }
 
@@ -37,6 +23,13 @@ html, body {
   box-sizing: border-box;
   justify-content: center; 
   align-items: center;
+
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
 .roulette-table {

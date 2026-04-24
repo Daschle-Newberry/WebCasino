@@ -82,6 +82,11 @@ class SquareState {
 }
 export function Roulette() {
     return (<div className={styles["roulette-main-page"]}>
+            {RouletteItems()}
+        </div>);
+}
+function RouletteItems() {
+    return (<div className={styles["roulette-main-page"]}>
 
             <p>Welcome to the Roulette table!</p>
 
