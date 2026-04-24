@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import styles from "./main-menu.module.css"
 
 //Uses function for component rendering as it is more modern and cleaner
-
 interface MainMenuProps {
     children?: ReactNode;
     title: string;
