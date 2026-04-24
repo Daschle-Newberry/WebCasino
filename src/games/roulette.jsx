@@ -86,7 +86,8 @@ export class Roulette extends Component {
 
             <p>Welcome to the Roulette table!</p>
 
-            <div className="roulette-table">
+        <div className="roulette-table">
+            
             <div className="board-row">
                 <Square2 value={3}/>
                 <Square2 value={6}/>

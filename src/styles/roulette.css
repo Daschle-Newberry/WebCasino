@@ -56,9 +56,18 @@ ul {
 
 */
 
-html, body {
+html {
+  background-color: rgba(20, 121, 40, 0.8);
+}
+
+body {
+
+  display: flex;
+  justify-content: center;
+  
+
   margin: 0;
-  padding: 0;
+  padding: 40px;
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -66,8 +75,6 @@ html, body {
 }
 
 .roulette-main-page {
-  width: 100vw;   
-  height: 100vh;
   overflow: hidden;
   box-sizing: border-box;
   justify-content: center; 
@@ -75,6 +82,7 @@ html, body {
 }
 
 .roulette-table {
+  
   margin-left: auto;
   margin-right: auto;
   align-items: center;
