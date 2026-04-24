@@ -1,22 +1,9 @@
-import React, { StrictMode, Component, ReactNode } from "react";
-import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { StrictMode } from "react";
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { createRoot } from "react-dom/client";
 import { BlackJack } from "./games/blackjack"
-import "./styles/index.css"
+import { MainMenu, MenuButton } from "./menu/mainmenu";
 
-class App extends Component {
-    override render(): ReactNode {
-        return <div className = "main-menu-page">
-            <div id = "menu-menu">
-                <h1>Awesome Casino</h1>
-                <Link to="/blackjack" className="menu-item"> Blackjack </Link>
-                <Link to="/blackjack" className="menu-item"> Roulette </Link>
-                <Link to="/blackjack" className="menu-item"> Slots </Link>
-                <Link to="/blackjack" className="menu-item"> Game3 </Link>
-            </div>
-        </div>
-    }
-}
 
 const rootElem = document.getElementById('root');
 
@@ -30,7 +17,13 @@ root.render(
     <StrictMode>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<App/>}/>
+                <Route path="/" element={<MainMenu title="Awesome Casino">
+                                <MenuButton text="Slots" link="/slots"/>
+                                <MenuButton text="Roulette" link="/roulette"/> 
+                                <MenuButton text="Blackjack" link="/blackjack"/>
+                                <MenuButton text="Game3" link="/game3"/>
+                                </MainMenu>
+                            }/>
                 <Route path="/blackjack" element={<BlackJack/>}/>
             </Routes>
         </BrowserRouter>
