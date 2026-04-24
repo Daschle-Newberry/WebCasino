@@ -1,7 +1,8 @@
 import React, { StrictMode, Component, ReactNode } from "react";
 import { createRoot } from "react-dom/client";
-
 import { useState } from "react";
+
+import styles from "./roulette.module.css"
 
 {/* https://www.typescriptlang.org/docs/handbook/jsx.html#value-based-elements */}
 
@@ -95,13 +96,13 @@ class SquareState{
 export class Roulette extends Component{
     override render(): ReactNode{
         return(
-        <div className="roulette-main-page">
+        <div className={styles["roulette-main-page"]}>
 
             <p>Welcome to the Roulette table!</p>
 
-        <div className="roulette-table">
+        <div className={styles["roulette-table"]}>
             
-            <div className="board-row">
+            <div className={styles["board-row"]}>
                 <Square2 value={3}/>
                 <Square2 value={6}/>
                 <Square2 value={9}/>
@@ -115,7 +116,7 @@ export class Roulette extends Component{
                 <Square2 value={33}/>
                 <Square2 value={36}/>
             </div>
-            <div className="board-row">
+            <div className={styles["board-row"]}>
                 <Square2 value={2}/>
                 <Square2 value={5}/>
                 <Square2 value={8}/>
@@ -129,7 +130,7 @@ export class Roulette extends Component{
                 <Square2 value={32}/>
                 <Square2 value={35}/>
             </div>
-            <div className="board-row">
+            <div className={styles["board-row"]}>
                 <Square2 value={1}/>
                 <Square2 value={4}/>
                 <Square2 value={7}/>

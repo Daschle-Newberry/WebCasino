@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { createRoot } from "react-dom/client";
 import { BlackJack } from "./games/blackjack/Blackjack"
 import { MainMenu, MenuButton } from "./menu/MainMenu";
+import { Roulette } from "./games/roulette/roulette";
 
 
 const rootElem = document.getElementById('root');
@@ -26,6 +27,7 @@ root.render(
                     </MainMenu>
                     }/>
                 <Route path="/blackjack" element={<BlackJack/>}/>
+                <Route path="/roulette" element={<Roulette/>}/>
             </Routes>
         </BrowserRouter>
     </StrictMode>
