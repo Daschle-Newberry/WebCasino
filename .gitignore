@@ -9,3 +9,6 @@
 !src/**
 !public/
 !public/**
+
+
+src/**/*.jsx
