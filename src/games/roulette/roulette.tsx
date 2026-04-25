@@ -60,45 +60,12 @@ const Square2 = (value : {value: number}) => {
     );
 }
 
-{/** Used prior to function component, value-based element
-     Issues with setting type to value
-
-function Square({value}) {
-
-    const [selected, setSelected] = useState(Boolean);
-
-    function handleClick(){
-        // toggle boolean : selected
-        // set color blue (?)
-        // add/remove from list of values to be submitted
-        if(selected == true){setSelected(false);}
-        else if(selected == false){setSelected(true);}
-
-        console.log('clicked', value, selected);
-
-    }
-    return (
-    <button 
-        className="square"
-        onClick={handleClick}
-        >
-            {value}
-        </button>
-    );
-}
-
-*/}
-
 class SquareState{
     selected : boolean = false;
 }
 
-export function Roulette() {
+function Roulette() {
         return(
-        <div className={styles["roulette-main-page"]}>
-
-            <p>Welcome to the Roulette table!</p>
-
         <div className={styles["roulette-table"]}>
             
             <div className={styles["board-row"]}>
@@ -144,20 +111,20 @@ export function Roulette() {
                 <Square2 value={34}/>
             </div>
         </div>
-        </div>
         );
     }
 
-// const rootElem = document.getElementById('root');
-
-// if( rootElem == null ) {
-//     alert('you forgot to put a root element in your HTML file.');
-// }
-
-// const root = createRoot( rootElem as HTMLElement );
-
-// root.render(
-//     <StrictMode>
-//         <Roulette/>
-//     </StrictMode>
-// );
+export function RoulettePage(){
+    return (
+        <div className={styles["roulette-main-page"]}>
+            <div className={styles["roulette-main"]}>
+                <h1 className={styles["roulette-title"]}>
+                    Welcome to the Roulette table!
+                </h1>
+            </div>
+            <div className={styles["roulette-main-page"]}>
+                {Roulette()}
+            </div>
+        </div>
+    )
+}

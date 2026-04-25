@@ -1,42 +1,49 @@
 /**https://react.dev/learn/tutorial-tic-tac-toe#adding-time-travel*/
 
-html {
-  background-color: rgba(20, 121, 40, 0.8);
-}
-
-body {
-
-  display: flex;
-  justify-content: center;
-  
-
-  margin: 0;
-  /* padding: 40px; */
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  background-color: rgba(20, 121, 40, 0.8);
-}
-
 .roulette-main-page {
-  overflow: hidden;
-  box-sizing: border-box;
+  width: 100vw;   
+  height: 100vh;
+  display: table-cell;
   justify-content: center; 
   align-items: center;
+  vertical-align: middle;
 
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: radial-gradient(
+      circle at center,
+      rgb(16, 120, 43),
+      rgb(7, 61, 21)
+  );
+}
+
+.roulette-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+
+  padding: 40px 30px;
+  border-radius: 20px;
+  background: rgba(16, 120, 43);
+
+  box-shadow: 5px 10px 40px rgba(0,0,0,.8);
+}
+
+.roulette-title {
+  font-size: 50px;
+  font-weight: 800;
+  
+  padding: 12px 24px;
+  border-radius: 15px;
+
+  background: white;
+  color: black;
+  box-shadow: 5px 10px rgba(0,0,0,1);
 }
 
 .roulette-table {
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .square {
@@ -62,12 +69,12 @@ body {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
+  height: 50px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 50px;
 }
 
 .redSquare {
@@ -78,12 +85,12 @@ body {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
+  height: 50px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 50px;
 }
 
 .selected {
@@ -93,12 +100,12 @@ body {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
+  height: 50px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 50px;
 }
 
 .board-row:after {
