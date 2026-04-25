@@ -1,0 +1,6 @@
+.deck {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: .07;
+    font-size: 2em;
+}
