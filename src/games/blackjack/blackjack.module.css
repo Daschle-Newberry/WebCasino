@@ -1,4 +1,18 @@
-.deck {
+.blackjack-main-page {
+    width: 100vw;   
+    height: 100vh;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+
+    background: radial-gradient(
+        circle at center,
+        rgb(16, 120, 43),
+        rgb(7, 61, 21)
+    );
+}
+
+.blackjack-hand {
     display: flex;
     flex-wrap: wrap;
     flex-basis: .07;
