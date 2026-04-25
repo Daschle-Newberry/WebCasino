@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { createRoot } from "react-dom/client";
 import { Blackjack } from "./games/blackjack/Blackjack"
 import { MainMenu, MenuButton } from "./menu/MainMenu";
-import { Roulette } from "./games/roulette/roulette";
+import { RoulettePage } from "./games/roulette/roulette";
 
 import "./global.module.css";
 
@@ -28,7 +28,7 @@ root.render(
                     </MainMenu>
                     }/>
                 <Route path="/blackjack" element={<Blackjack/>}/>
-                <Route path="/roulette" element={<Roulette/>}/>
+                <Route path="/roulette" element={<RoulettePage/>}/>
             </Routes>
         </BrowserRouter>
     </StrictMode>
