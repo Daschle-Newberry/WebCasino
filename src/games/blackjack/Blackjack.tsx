@@ -23,7 +23,7 @@ class Card {
 
 type GameState = {
     deck: Card[];
-    playerCards: Card[];
+    playerHands: Card[][];
     dealerCards: Card[];
 }
 
@@ -49,44 +49,64 @@ function getDeck(): Card[] {
 }
 
 
-function DealButton({ onclick }: {onclick: ()=> void }) {
+function DealButton({  handIndex, onDeal}: { handIndex: number, onDeal: (i: number)=> void }) {
     return(
-        <button onClick = {onclick}> Deal </button>
+        <button onClick = {() => onDeal(handIndex)}> Deal </button>
     )
 }
 
-function Hand({ cards }: { cards: Card[] }) {
-    const cardsComponents = cards.map((c: Card) => <div className = {styles["card"]}>{ c.getFace() }</div>)
-    return(
-        <div className={styles["blackjack-hand"]}>
-            { cardsComponents }
-        </div>
+ function Hand({ cards, handIndex, onDeal}: {
+     cards: Card[], 
+     handIndex: number,
+     onDeal: (i: number) => void; 
+    }) {
+        return(
+            <div className={styles["blackjack-hand"]}>
+                { cards.map((c: Card, i : number) => (
+                    <div key = { i } className = {styles["card"]}>
+                        { c.getFace() }
+                    </div>
+                ))}
+                <DealButton onDeal = { onDeal } handIndex = { handIndex }></DealButton>
+            </div>
     );    
 }
 
 export function Blackjack() {
     const [gameState, setGameState] = useState<GameState>({
         deck: getDeck(),
-        playerCards: [],
+        playerHands: [[]],
         dealerCards: [],
     })
 
-    function dealCard(): void {
+    function dealCard(index: number): void {
         const newCard = gameState.deck.pop();
 
         if(newCard == undefined) throw new Error("Out of cards!");
+        
+        const newHands = [...gameState.playerHands]
+
+        const newHand = [...newHands[index]];
+        newHand.push(newCard);
+        newHands[index] = newHand;
 
         setGameState(prev => ({
             ...prev,
-            playerCards: [...prev.playerCards, newCard],
+            playerHands: newHands
         }));
     }
 
     
     return (
         <div className={styles["blackjack-main-page"]}>
-            <DealButton onclick={dealCard}></DealButton>
-            <Hand cards = { gameState.playerCards }></Hand>
+            <div className={styles["blackjack-table"]}>
+                <div className={styles["dealer-hand"]}>
+                    
+                </div>
+                <div className={styles["player-hands"]}>
+                    { gameState.playerHands.map((hand: Card[], i : number) => <Hand key = { i } cards = { hand } handIndex = { i } onDeal = { dealCard }/>)}
+                </div>
+            </div>
         </div>
     
     );
