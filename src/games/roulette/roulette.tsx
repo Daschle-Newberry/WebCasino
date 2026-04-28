@@ -66,6 +66,14 @@ const Square2 = (value : {value: number}) => {
 
 const Gamble = () => {
 
+    // function to handle money
+    const [bet, setBet] = useState('');
+    const numBet = Number(bet);
+
+    const [bank, setBank] = useState(100000);
+
+    console.log(numBet);
+
     function handleClick(){
         // Can only land on 0 through 36
         let marbleSlot = Math.floor(Math.random() * 37);
@@ -74,20 +82,41 @@ const Gamble = () => {
 
         if(tableSelections.contains(marbleSlot)){
             console.log("Winner!");
+            winMoney();
             // add in money rules and effects
         }
         else{
             console.log("Better luck next time.");
+            setBank(bank - numBet);
         }
     }
 
+    function winMoney(){
+        // adjust to have actual payout values
+        setBank(bank + numBet);
+    }
+
     return (
-        <button
-            className="button"
-            onClick={handleClick}
-        >
-            Let it ride!
-        </button>
+        <div className="betTab">
+            <div className="spacing">
+                <label>Bank: {bank}</label>
+            </div>
+            <div className="spacing">
+                <input
+                    value={bet}
+                    onChange={e => setBet(e.target.value)}
+                    type="number"
+                />
+            </div>
+            <div className="spacing">
+                <button
+                    onClick={handleClick}
+                >
+                    Let it ride!
+                </button>
+            </div>
+        
+        </div>
     );
 }
 
@@ -138,8 +167,10 @@ function Roulette() {
                 <Square2 value={31}/>
                 <Square2 value={34}/>
             </div>
-            <div className={styles["button"]}>
-                <Gamble></Gamble>
+            <div className={styles["betTab"]}>
+                <div className={styles["roulette-bar"]}>
+                    <Gamble></Gamble>
+                </div>
             </div>
         </div>
     );
