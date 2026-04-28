@@ -62,12 +62,19 @@ function DealButton({  handIndex, onDeal}: { handIndex: number, onDeal: (i: numb
     }) {
         return(
             <div className={styles["blackjack-hand"]}>
-                { cards.map((c: Card, i : number) => (
-                    <div key = { i } className = {styles["card"]}>
+                <div className={styles["blackjack-hand-cards"]}>
+                      { cards.map((c: Card, i : number) => (
+                    <div key = { i } className = {styles["blackjack-card"]}>
                         { c.getFace() }
                     </div>
                 ))}
-                <DealButton onDeal = { onDeal } handIndex = { handIndex }></DealButton>
+                </div>
+                <div className = { styles["blackjack-hand-buttons"] }>
+                    <DealButton onDeal = { onDeal } handIndex = { handIndex }></DealButton>
+                    <DealButton onDeal = { ()=> { return }} handIndex = { handIndex }></DealButton>
+                    <DealButton onDeal = { ()=> { return }} handIndex = { handIndex }></DealButton>
+
+                </div>
             </div>
     );    
 }
