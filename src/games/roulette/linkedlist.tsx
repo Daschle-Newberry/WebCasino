@@ -1,18 +1,18 @@
-export class linkedListNode{
-    public value: number;
-    public next: linkedListNode | null;
-    public prev: linkedListNode | null;
+export class linkedListNode<T>{
+    public value: T;
+    public next: linkedListNode<T> | null;
+    public prev: linkedListNode<T> | null;
 
-    constructor(value: number){
+    constructor(value: T){
         this.value = value;
         this.next = null;
         this.prev = null;
     }
 }
 
-export class linkedList{
-    private head: linkedListNode | null;
-    private tail: linkedListNode | null;
+export class linkedList<T>{
+    private head: linkedListNode<T> | null;
+    private tail: linkedListNode<T> | null;
     private size: number;
 
     constructor(){
@@ -29,7 +29,7 @@ export class linkedList{
         return this.size <= 0;
     }
 
-    public contains(value: number): boolean{
+    public contains(value: T): boolean{
         let hold = this.head;
         while (hold != null){
             if(hold.value === value){
@@ -45,7 +45,7 @@ export class linkedList{
         ie a player clicks '7' and immediately deselectes '7'
         either due to an initial misclick or second guessing a bet 
     */
-    public add(value: number): void{
+    public add(value: T): void{
         let newNode = new linkedListNode(value);
 
         if(!this.head){
@@ -61,7 +61,7 @@ export class linkedList{
         this.size++;
     }
 
-    public remove(value: number): boolean{
+    public remove(value: T): boolean{
         let cursor = this.head;
         
         if(!cursor){

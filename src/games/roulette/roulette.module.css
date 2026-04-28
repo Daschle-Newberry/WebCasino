@@ -54,11 +54,26 @@
   font-weight: bold;
   line-height: 34px;
   height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10;
   text-align: center;
-  width: 34px;
+  width: auto;
+}
+
+.selectedSquare {
+  background: lightblue;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10;
+  text-align: center;
+  width: auto;
 }
 
 .blackSquare {
