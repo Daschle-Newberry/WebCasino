@@ -1,11 +1,15 @@
 import React, { StrictMode, Component, ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { useState } from "react";
+import { linkedListNode , linkedList } from "./linkedlist"
 
 import styles from "./roulette.module.css"
 
-{/* https://www.typescriptlang.org/docs/handbook/jsx.html#value-based-elements */}
+// May need to edit linkedList when accepting BLACK/RED bets
+let tableSelections = new linkedList();
 
+// https://www.typescriptlang.org/docs/handbook/jsx.html#value-based-elements 
+// Handles the state of each tile (onClick, selected, color, value)
 const Square2 = (value : {value: number}) => {
     const [selected, setSelected] = useState(Boolean);
     const [style, setStyle] = useState(styles.square);
@@ -25,17 +29,17 @@ const Square2 = (value : {value: number}) => {
         // set color blue (?)
         // add/remove from list of values to be submitted
         
-        // changeStyle();
-
         if(selected === true){
             setSelected(false);
+            tableSelections.remove(value.value);
         }
         else if(selected === false){
             setSelected(true);
+            tableSelections.add(value.value);
         }
         
         changeStyle();
-        console.log('clicked', value, selected, style);
+        console.log('clicked', value, selected, style, tableSelections);
     }
 
     if(style === styles.square){
@@ -60,12 +64,36 @@ const Square2 = (value : {value: number}) => {
     );
 }
 
-class SquareState{
-    selected : boolean = false;
+const Gamble = () => {
+
+    function handleClick(){
+        // Can only land on 0 through 36
+        let marbleSlot = Math.floor(Math.random() * 37);
+        console.log(marbleSlot);
+        console.log(tableSelections);
+
+        if(tableSelections.contains(marbleSlot)){
+            console.log("Winner!");
+            // add in money rules and effects
+        }
+        else{
+            console.log("Better luck next time.");
+        }
+    }
+
+    return (
+        <button
+            className="button"
+            onClick={handleClick}
+        >
+            Let it ride!
+        </button>
+    );
 }
 
+{/* Controls the layout of the page, creates the table number layout */}
 function Roulette() {
-        return(
+    return(
         <div className={styles["roulette-table"]}>
             
             <div className={styles["board-row"]}>
@@ -110,9 +138,12 @@ function Roulette() {
                 <Square2 value={31}/>
                 <Square2 value={34}/>
             </div>
+            <div className={styles["button"]}>
+                <Gamble></Gamble>
+            </div>
         </div>
-        );
-    }
+    );
+}
 
 export function RoulettePage(){
     return (

@@ -113,3 +113,15 @@
   content: '';
   display: table;
 }
+
+.button {
+  font-size: 50px;
+  font-weight: 800;
+  
+  padding: 12px 24px;
+  border-radius: 15px;
+
+  background: white;
+  color: black;
+  box-shadow: 5px 10px rgba(0,0,0,1);
+}
