@@ -1,108 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, ReactNode, act } from "react";
 import styles from "./blackjack.module.css";
+import { Card, GameState, getDeck, dealCard, splitHand, isSplittable, handValue } from "./GameLogic"
 
-class Card {
-	public suit: number;
-	public rank: number;
-	public value: number;
-
-    private codepoint: number;
-
-	public constructor(suit: number, rank: number, value: number, codepoint: number) {
-		this.suit = suit;
-		this.rank = rank;``
-		this.value = value;
-        this.codepoint = codepoint;
-	}
-
-    public getFace(): string {
-        return String.fromCodePoint(this.codepoint);
-    }
-}
-
-
-type GameState = {
-    deck: Card[];
-    playerHands: Card[][];
-    dealerCards: Card[];
-}
-
-
-
-function getDeck(): Card[] {
-    const start: number = 0x1F0A1;
-    const cards: Card[] = [];
-    for(let suit = 0; suit < 4; suit++){
-        for(let rank = 0; rank < 14; rank++) {
-            if(rank == 11) continue;
-            const codepoint: number = start + (16 * suit) + rank;
-
-            let value: number;
-            if(11 <= rank) value = 10;
-            else if(rank == 0) value = 11;
-            else value = rank;
-
-            cards.push(new Card(suit, rank, value, codepoint));
-        }
-    }
-    return cards;
-}
-
-
-function DealButton({  handIndex, onDeal}: { handIndex: number, onDeal: (i: number)=> void }) {
+function Button({  isActive, handIndex, onClick, children}: {
+    isActive: boolean; 
+    handIndex: number, 
+    onClick: (i: number)=> void, 
+    children?: ReactNode[] | string 
+}) {
+    const style = isActive ? styles["blackjack-button"] : styles["blackjack-inactive-button"];
+    const actualClick = isActive ? onClick : () => {}
     return(
-        <button onClick = {() => onDeal(handIndex)}> Deal </button>
+        <button className = { style } onClick = {() => actualClick(handIndex)}> { children } </button>
     )
 }
 
- function Hand({ cards, handIndex, onDeal}: {
+ function Hand({ cards, numHands, handIndex, onDeal, onSplit}: {
      cards: Card[], 
+     numHands: number;
      handIndex: number,
      onDeal: (i: number) => void; 
-    }) {
-        return(
-            <div className={styles["blackjack-hand"]}>
+     onSplit: (i: number) => void;
+}) {
+
+    const bust = handValue(cards) > 21;
+    const splittalbe = isSplittable(cards);
+    return(
+        <div className={styles["blackjack-hand-wrapper"]}>
+            <div className={ `${styles["blackjack-hand"]} ${bust ? styles["blackjack-hand-bust"] : ""}`}>
                 <div className={styles["blackjack-hand-cards"]}>
-                      { cards.map((c: Card, i : number) => (
+                        { cards.map((c: Card, i : number) => (
                     <div key = { i } className = {styles["blackjack-card"]}>
                         { c.getFace() }
                     </div>
                 ))}
                 </div>
                 <div className = { styles["blackjack-hand-buttons"] }>
-                    <DealButton onDeal = { onDeal } handIndex = { handIndex }></DealButton>
-                    <DealButton onDeal = { ()=> { return }} handIndex = { handIndex }></DealButton>
-                    <DealButton onDeal = { ()=> { return }} handIndex = { handIndex }></DealButton>
-
+                    <Button isActive = { !bust } onClick = { onDeal } handIndex = { handIndex }> Hit </Button>
+                    <Button isActive = { !bust && isSplittable(cards) && numHands <= 3} onClick = { onSplit } handIndex = { handIndex }> 
+                        Split 
+                    </Button>
+                    <Button isActive = { !bust } onClick = { ()=> { return }} handIndex = { handIndex }> Stay </Button>
                 </div>
             </div>
+            <p>{handValue(cards)}</p>
+        </div>
     );    
 }
 
 export function Blackjack() {
     const [gameState, setGameState] = useState<GameState>({
         deck: getDeck(),
-        playerHands: [[],[]],
+        playerHands: [[]],
         dealerCards: [],
     })
 
-    function dealCard(index: number): void {
-        const newCard = gameState.deck.pop();
-
-        if(newCard == undefined) throw new Error("Out of cards!");
-        
-        const newHands = [...gameState.playerHands]
-
-        const newHand = [...newHands[index]];
-        newHand.push(newCard);
-        newHands[index] = newHand;
-
-        setGameState(prev => ({
-            ...prev,
-            playerHands: newHands
-        }));
+    function handleDeal(index: number): void {
+        setGameState(prev => dealCard(prev, index));
     }
 
+    function handleSplit(index: number): void {
+        setGameState(prev => splitHand(prev, index));
+    }
     
     return (
         <div className={styles["blackjack-main-page"]}>
@@ -112,7 +71,13 @@ export function Blackjack() {
                 </div>
                 <div className={styles["player-hands"]}>
                     { gameState.playerHands.map((hand: Card[], i : number) => 
-                        <Hand key = { i } cards = { hand } handIndex = { i } onDeal = { dealCard }/>
+                        <Hand 
+                        key = { i } 
+                        cards = { hand } 
+                        numHands = { gameState.playerHands.length} 
+                        handIndex = { i } 
+                        onDeal = { handleDeal } 
+                        onSplit = { handleSplit }/>
                     )}
                 </div>
             </div>
