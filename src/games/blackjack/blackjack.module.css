@@ -9,16 +9,16 @@
         circle at center,
         rgb(16, 120, 43),
         rgb(7, 61, 21)
-    );
+    );    font-size: 2em;
+
 }
 
 .blackjack-hand {
-    display: flex;
-    flex-wrap: wrap;
-    flex-basis: .07;
+    display: block;
     font-size: 2em;
 }
 
 .player-hands {
     display: flex;
+    flex-direction: row;
 }

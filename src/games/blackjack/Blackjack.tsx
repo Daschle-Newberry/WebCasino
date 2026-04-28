@@ -75,7 +75,7 @@ function DealButton({  handIndex, onDeal}: { handIndex: number, onDeal: (i: numb
 export function Blackjack() {
     const [gameState, setGameState] = useState<GameState>({
         deck: getDeck(),
-        playerHands: [[]],
+        playerHands: [[],[]],
         dealerCards: [],
     })
 
@@ -104,7 +104,9 @@ export function Blackjack() {
                     
                 </div>
                 <div className={styles["player-hands"]}>
-                    { gameState.playerHands.map((hand: Card[], i : number) => <Hand key = { i } cards = { hand } handIndex = { i } onDeal = { dealCard }/>)}
+                    { gameState.playerHands.map((hand: Card[], i : number) => 
+                        <Hand key = { i } cards = { hand } handIndex = { i } onDeal = { dealCard }/>
+                    )}
                 </div>
             </div>
         </div>
