@@ -1,7 +1,7 @@
 import React, { StrictMode } from "react";
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { createRoot } from "react-dom/client";
-import { BlackJack } from "./games/blackjack/Blackjack"
+import { Blackjack } from "./games/blackjack/Blackjack"
 import { MainMenu, MenuButton } from "./menu/MainMenu";
 import { RoulettePage } from "./games/roulette/roulette";
 
@@ -27,7 +27,7 @@ root.render(
                         <MenuButton text="Game3" link="/game3"/>
                     </MainMenu>
                     }/>
-                <Route path="/blackjack" element={<BlackJack/>}/>
+                <Route path="/blackjack" element={<Blackjack/>}/>
                 <Route path="/roulette" element={<RoulettePage/>}/>
             </Routes>
         </BrowserRouter>
