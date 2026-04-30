@@ -52,20 +52,28 @@ const Square2 = (value : {value: number}) => {
     }
 
     function handleClick(){
-        // toggle boolean : selected
-        // set color blue (?)
-        // add/remove from list of values to be submitted
+        /**
+         * toggle boolean : selected
+         * set color blue (?)
+         * add/remove from list of values to be submitted
+         * 
+         * ---
+         * 
+         * Inside bets, keep selections to 6 max.
+         * Organize into categories (straight, split, street, corner, etc.)
+         */
         
         if(selected === true){
             setSelected(false);
             tableSelections.remove(value.value);
+            changeStyle();
         }
-        else if(selected === false){
+        else if(selected === false && tableSelections.length() < 6){
             setSelected(true);
             tableSelections.add(value.value);
+            changeStyle();
         }
         
-        changeStyle();
         console.log('clicked', value, selected, style, tableSelections);
     }
 
@@ -96,16 +104,13 @@ const OutsideBets = (value: {value: string}) => {
     const [style, setStyle] = useState(styles.square);
 
     function handleClick(){
-        // toggle boolean : selected
-        // set color blue (?)
-        // add/remove from list of values to be submitted
         
         if(selected === true){
             setSelected(false);
             tableSelections = new linkedList();
             setStyle(styles.square);
         }
-        else if(selected === false){
+        else if(selected === false && tableSelections.isEmpty()){
             setSelected(true);
             setStyle(styles.selectedSquare);
             if(value.value === "1 to 12"){
@@ -123,13 +128,64 @@ const OutsideBets = (value: {value: string}) => {
                     tableSelections.add(i);
                 }
             }
+            else if(value.value === "1 to 18"){
+                for(let i = 1; i < 19; i++){
+                    tableSelections.add(i);
+                }
+            }
+            else if(value.value === "19 to 36"){
+                for(let i = 19; i < 37; i++){
+                    tableSelections.add(i);
+                }
+            }
+            else if(value.value === "Even"){
+                for(let i = 0; i < 37; i++){
+                    if(i % 2 == 0){
+                        tableSelections.add(i);
+                    }
+                }
+            }
+            else if(value.value === "Odd"){
+                for(let i = 0; i < 37; i++){
+                    if(i % 2 > 0){
+                        tableSelections.add(i);
+                    }
+                }
+            }
+            else if(value.value === "Red"){
+                for(let i = 0; i < 37; i++){
+                    if(i % 2 > 0 && i < 10){
+                        tableSelections.add(i);
+                    }   
+                    else if(i % 2 == 0 && i < 19 && i > 10){
+                        tableSelections.add(i);
+                    }
+                    else if(i % 2 > 0 && i < 28 && i > 18){
+                        tableSelections.add(i);
+                    }
+                    else if(i % 2 == 0 && i < 37 && i > 28){
+                        tableSelections.add(i);
+                    }
+                }
+            }
+            else if(value.value === "Black"){
+                for(let i = 0; i < 37; i++){
+                    if(i % 2 == 0 && i < 11){
+                        tableSelections.add(i);
+                    }
+                    else if(i % 2 > 0 && i < 19 && i > 10){
+                        tableSelections.add(i);
+                    }
+                    else if(i % 2 == 0 && i < 29 && i > 18){
+                        tableSelections.add(i);
+                    }
+                    else if(i % 2 > 0 && i < 37 && i > 28){
+                        tableSelections.add(i);
+                    }
+                }
+            }
         }
-        
-        // changeStyle();
-        // console.log('clicked', value, selected, style, tableSelections);
     }
-
-
 
     return (
         <button
@@ -149,173 +205,64 @@ const Gamble = () => {
 
     const [bank, setBank] = useState(100000);
 
-    console.log(numBet);
+    const [prevMarble, setPrevMarble] = useState(Number);
+    const [marble, setMarble] = useState(Math.ceil(Math.random() * 36));
+    const [winner, setWinner] = useState("");
 
     function handleClick(){
-        // Can only land on 0 through 36
-        let marbleSlot = Math.floor(Math.random() * 37);
-        console.log(marbleSlot);
+        setMarble(Math.ceil(Math.random() * 36));
+        setPrevMarble(marble);
+        console.log(marble);
         console.log(tableSelections);
 
-        if(tableSelections.contains(marbleSlot)){
+        if(tableSelections.contains(marble)){
             console.log("Winner!");
-            winMoney(marbleSlot);
+            setWinner("Winner!");
+            winMoney();
             // add in money rules and effects
         }
         else{
             console.log("Better luck next time.");
+            setWinner("Better luck next time.")
             setBank(bank - numBet);
         }
     }
 
-    function winMoney(marbleSlot: number){
+    function winMoney(){
         // adjust to have actual payout values
         let payout = numBet;
 
-        //
         // Inside bets 
-        //
 
         // Straight up : One number only
-        if(tableSelections.length() == 1){
-            payout *= 35;
-        }
-
+        if(tableSelections.length() == 1){payout *= 35;}
         // Split : Two numbers only (neighboring tiles)
-        else if(tableSelections.length() == 2){
-            payout *= 17;
-        }
-
+        else if(tableSelections.length() == 2){payout *= 17;}
         // Street : 3 numbers only (consecutive line)
-        else if(tableSelections.length() == 3){
-            payout *= 11;
-        }
-
+        else if(tableSelections.length() == 3){payout *= 11;}
         // Corner : 4 numbers only (block format)
-        else if(tableSelections.length() == 4){
-            payout *= 8
-        }
-
-        // 0-1-2-3
-
+        else if(tableSelections.length() == 4){payout *= 8}
         // Five Numbers : 5 numbers only (consecutive)
-        else if(tableSelections.length() == 5){
-            payout *= 6;
-        }
-
+        else if(tableSelections.length() == 5){payout *= 6;}
         // Line: 6 numbers only (consecutive)
-        else if(tableSelections.length() == 6){
-            payout *= 5;
-        }
+        else if(tableSelections.length() == 6){payout *= 5;}
 
-        //
-        // Outside bets
-        // 
+        // Outside bets 
 
-        // Column 1
-        else if( marbleSlot == 1 ||
-            marbleSlot == 4 ||
-            marbleSlot == 7 || 
-            marbleSlot == 10 ||
-            marbleSlot == 13 ||
-            marbleSlot == 16 ||
-            marbleSlot == 19 ||
-            marbleSlot == 22 ||
-            marbleSlot == 25 ||
-            marbleSlot == 28 ||
-            marbleSlot == 31 ||
-            marbleSlot == 34)
-            {
-                payout *= 2;
-        }
-
-        // Column 2
-        else if( marbleSlot == 2 ||
-            marbleSlot == 5 ||
-            marbleSlot == 8 || 
-            marbleSlot == 11 ||
-            marbleSlot == 14 ||
-            marbleSlot == 17 ||
-            marbleSlot == 20 ||
-            marbleSlot == 23 ||
-            marbleSlot == 26 ||
-            marbleSlot == 29 ||
-            marbleSlot == 32 ||
-            marbleSlot == 35)
-            {
-                payout *= 2;
-        }
-
-        // Column 3
-        else if( marbleSlot == 3 ||
-            marbleSlot == 6 ||
-            marbleSlot == 9 || 
-            marbleSlot == 12 ||
-            marbleSlot == 15 ||
-            marbleSlot == 18 ||
-            marbleSlot == 21 ||
-            marbleSlot == 24 ||
-            marbleSlot == 27 ||
-            marbleSlot == 30 ||
-            marbleSlot == 33 ||
-            marbleSlot == 36)
-            {
-                payout *= 2;
-        }
-
-        // Dozen 1
-        else if(marbleSlot < 13 && marbleSlot != 0){
-            payout *= 2;
-        }
-
-        // Dozen 2
-        else if(marbleSlot > 12 && marbleSlot < 25){
-            payout *= 2;
-        }
-
-        // Dozen 3
-        else if(marbleSlot > 24){
-            payout *= 2;
-        }
-
-        // Red
-        else if( (marbleSlot % 2 > 0 && marbleSlot < 10) ||
-            (marbleSlot % 2 == 0 && marbleSlot > 10 && marbleSlot < 19) ||
-            (marbleSlot % 2 > 0 && marbleSlot > 18 && marbleSlot < 28) || 
-            (marbleSlot % 2 == 0 && marbleSlot > 28) )
-            {
-                payout;
-        }
-
-        // Black
-        else if( (marbleSlot % 2 == 0 && marbleSlot < 11) ||
-            (marbleSlot % 2 > 0 && marbleSlot > 10 && marbleSlot < 19) ||
-            (marbleSlot % 2 == 0 && marbleSlot > 19 && marbleSlot < 29) || 
-            (marbleSlot % 2 > 0 && marbleSlot > 28) )
-            {
-                payout;
-        }
-
-        // Odd
-        else if(marbleSlot % 2 > 0){
-            payout;
-        }
-
-        // Even
-        else if(marbleSlot % 2 == 0){
-            payout;
-        }
-
-        // High or Low
-        else if(marbleSlot < 19 && marbleSlot != 0){
-            payout;
-        }
-
-        else if(marbleSlot > 18){
-            payout;
-        }
+        // Columns and other dozens
+        else if(tableSelections.length() == 12){payout *= 2;}
+        // Any half of board
+        else if(tableSelections.length() == 18){payout;}
 
         setBank(bank + payout);
+    }
+
+    if(bank <= 0){
+        return (
+            <div> 
+                No money, no chips, no spins.
+            </div>
+        )
     }
 
     return (
@@ -337,6 +284,13 @@ const Gamble = () => {
                     Let it ride!
                 </button>
             </div>
+            <div>
+                Winning Slot: {prevMarble.toString()}
+            </div>
+
+            <div>
+                {winner}
+            </div>
         
         </div>
     );
@@ -346,10 +300,7 @@ const Gamble = () => {
 function Roulette() {
     return(
         <div className={styles["roulette-table"]}>
-            <div>
-                
-            </div>
-            
+
             <div className={styles["board-row"]}>
                 <Square2 value={3}/>
                 <Square2 value={6}/>
