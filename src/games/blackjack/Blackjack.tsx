@@ -1,84 +1,101 @@
 import React, { useState, ReactNode, act } from "react";
 import styles from "./blackjack.module.css";
-import { Card, GameState, getDeck, dealCard, splitHand, isSplittable, handValue } from "./GameLogic"
+import { Card, Hand, GameState } from "./gamelogic/Types"
+import * as Actions from "./gamelogic/Actions"
+import * as Util from "./gamelogic/Utils"
 
-function Button({  isActive, handIndex, onClick, children}: {
+function Button({  isActive, onClick, children}: {
     isActive: boolean; 
-    handIndex: number, 
-    onClick: (i: number)=> void, 
+    onClick: () => void, 
     children?: ReactNode[] | string 
 }) {
     const style = isActive ? styles["blackjack-button"] : styles["blackjack-inactive-button"];
     const actualClick = isActive ? onClick : () => {}
     return(
-        <button className = { style } onClick = {() => actualClick(handIndex)}> { children } </button>
+        <button className = { style } onClick = {() => actualClick()}> { children } </button>
     )
 }
 
- function Hand({ cards, numHands, handIndex, onDeal, onSplit}: {
-     cards: Card[], 
-     numHands: number;
-     handIndex: number,
-     onDeal: (i: number) => void; 
-     onSplit: (i: number) => void;
+ function HandComponent({ hand, active }: {
+     hand: Hand, 
+     active: boolean,
 }) {
 
-    const bust = handValue(cards) > 21;
-    const splittalbe = isSplittable(cards);
+    const value: number = Util.handValue(hand);
+    const style: string[]  = [styles["blackjack-hand"]];
+    
+    if(active) style.push(styles["blackjack-hand-active"]);
+    if(hand.isDone) style.push(styles["blackjack-hand-done"]);
+    if(value > 21) style.push(styles["blackjack-hand-bust"]);
+    else if(value == 21) style.push(styles["blackjack-hand-blackjack"]);
+
     return(
         <div className={styles["blackjack-hand-wrapper"]}>
-            <div className={ `${styles["blackjack-hand"]} ${bust ? styles["blackjack-hand-bust"] : ""}`}>
+            <div className={ style.join(" ") }>
                 <div className={styles["blackjack-hand-cards"]}>
-                        { cards.map((c: Card, i : number) => (
+                        { hand.cards.map((c: Card, i : number) => (
                     <div key = { i } className = {styles["blackjack-card"]}>
                         { c.getFace() }
                     </div>
                 ))}
                 </div>
-                <div className = { styles["blackjack-hand-buttons"] }>
-                    <Button isActive = { !bust } onClick = { onDeal } handIndex = { handIndex }> Hit </Button>
-                    <Button isActive = { !bust && isSplittable(cards) && numHands <= 3} onClick = { onSplit } handIndex = { handIndex }> 
-                        Split 
-                    </Button>
-                    <Button isActive = { !bust } onClick = { ()=> { return }} handIndex = { handIndex }> Stay </Button>
-                </div>
             </div>
-            <p>{handValue(cards)}</p>
+            <p className={styles["blackjack-hand-score"]}>{Util.handValue(hand)}</p>
         </div>
     );    
 }
 
 export function Blackjack() {
     const [gameState, setGameState] = useState<GameState>({
-        deck: getDeck(),
-        playerHands: [[]],
-        dealerCards: [],
+        deck: Actions.getDeck(),
+        playerHands: [{cards: [], isDone: false}],
+        activeHand: 0,
+        dealerCards: {cards: [], isDone: false},
+        dealerTurn: false,
     })
 
-    function handleDeal(index: number): void {
-        setGameState(prev => dealCard(prev, index));
+    function handleDeal(): void {
+        setGameState(prev => Actions.dealCard(prev));
     }
 
-    function handleSplit(index: number): void {
-        setGameState(prev => splitHand(prev, index));
+    function handleStay(): void {
+        setGameState(prev => Actions.stayHand(prev))
+    }
+    function handleSplit(): void {
+        setGameState(prev => Actions.splitHand(prev));
+    }
+    
+    if(gameState.playerHands.every(h => h.isDone)) {
+        gameState.dealerTurn = true;
     }
     
     return (
         <div className={styles["blackjack-main-page"]}>
+            <h1 className={styles["blackjack-title"]}>
+                                Welcome to the Blackjack table!
+            </h1>
             <div className={styles["blackjack-table"]}>
                 <div className={styles["dealer-hand"]}>
-                    
+                    <HandComponent hand = { gameState.dealerCards } active = { true }/>
                 </div>
                 <div className={styles["player-hands"]}>
-                    { gameState.playerHands.map((hand: Card[], i : number) => 
-                        <Hand 
+                    { gameState.playerHands.map((hand: Hand, i : number) => 
+                        <HandComponent 
                         key = { i } 
-                        cards = { hand } 
-                        numHands = { gameState.playerHands.length} 
-                        handIndex = { i } 
-                        onDeal = { handleDeal } 
-                        onSplit = { handleSplit }/>
+                        hand = { hand } 
+                        active = { i == gameState.activeHand }
+                        />
                     )}
+                </div>
+                <div className = { styles["blackjack-hand-buttons"] }>
+                    <Button isActive = { !gameState.dealerTurn } onClick = { handleDeal } > Hit </Button>
+                    <Button 
+                        isActive = { !gameState.dealerTurn && Util.canSplit(gameState) } 
+                        onClick = { handleSplit } 
+                    > 
+                        Split 
+                    </Button>
+                    <Button isActive = { !gameState.dealerTurn } onClick = { handleStay } > Stay </Button>
                 </div>
             </div>
         </div>
