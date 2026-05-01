@@ -37,6 +37,12 @@ export enum CardRank {
     KING = 13
 }
 
+export enum GamePhase {
+    PLAYERTURN,
+    DEALERTURN,
+    GAMEOVER
+}
+
 
 export type Hand = {
     cards: Card[],
@@ -47,6 +53,6 @@ export type GameState = {
     deck: Card[];
     playerHands: Hand[];
     activeHand: number;
-    dealerCards: Hand;
-    dealerTurn: boolean;
+    dealerHand: Hand;
+    phase: GamePhase;
 }

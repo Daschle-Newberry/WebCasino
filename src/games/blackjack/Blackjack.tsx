@@ -1,6 +1,6 @@
-import React, { useState, ReactNode, act } from "react";
+import React, { useState, useEffect, ReactNode, act } from "react";
 import styles from "./blackjack.module.css";
-import { Card, Hand, GameState } from "./gamelogic/Types"
+import { Card, Hand, GameState, GamePhase } from "./gamelogic/Types"
 import * as Actions from "./gamelogic/Actions"
 import * as Util from "./gamelogic/Utils"
 
@@ -16,15 +16,16 @@ function Button({  isActive, onClick, children}: {
     )
 }
 
- function HandComponent({ hand, active }: {
+function HandComponent({ hand, active = false, isDealer = false}: {
      hand: Hand, 
-     active: boolean,
+     active?: boolean,
+     isDealer?: boolean,
 }) {
 
     const value: number = Util.handValue(hand);
-    const style: string[]  = [styles["blackjack-hand"]];
+    const style: string[]  = [isDealer ? styles["blackjack-dealer-hand"] : styles["blackjack-hand"]];
     
-    if(active) style.push(styles["blackjack-hand-active"]);
+    if(active && !isDealer) style.push(styles["blackjack-hand-active"]);
     if(hand.isDone) style.push(styles["blackjack-hand-done"]);
     if(value > 21) style.push(styles["blackjack-hand-bust"]);
     else if(value == 21) style.push(styles["blackjack-hand-blackjack"]);
@@ -50,9 +51,23 @@ export function Blackjack() {
         deck: Actions.getDeck(),
         playerHands: [{cards: [], isDone: false}],
         activeHand: 0,
-        dealerCards: {cards: [], isDone: false},
-        dealerTurn: false,
+        dealerHand: {cards: [], isDone: false},
+        phase: GamePhase.PLAYERTURN
     })
+
+    useEffect(() => {
+        if(gameState.phase !== GamePhase.DEALERTURN) return;
+        
+        const loop = setInterval(()=> {
+            setGameState(prev => { 
+                return Actions.dealerChoice(prev);
+            } 
+            );
+        }, 1000)
+        
+        return () => clearInterval(loop);
+    
+    }, [gameState.phase]);
 
     function handleDeal(): void {
         setGameState(prev => Actions.dealCard(prev));
@@ -65,8 +80,9 @@ export function Blackjack() {
         setGameState(prev => Actions.splitHand(prev));
     }
     
-    if(gameState.playerHands.every(h => h.isDone)) {
-        gameState.dealerTurn = true;
+    //Change turns after player is finished
+    if(gameState.phase === GamePhase.PLAYERTURN && gameState.playerHands.every(h => h.isDone)) {
+        setGameState(prev => Actions.changeTurn(prev));
     }
     
     return (
@@ -75,9 +91,11 @@ export function Blackjack() {
                                 Welcome to the Blackjack table!
             </h1>
             <div className={styles["blackjack-table"]}>
+                <h1> Dealer </h1>
                 <div className={styles["dealer-hand"]}>
-                    <HandComponent hand = { gameState.dealerCards } active = { true }/>
+                    <HandComponent hand = { gameState.dealerHand } isDealer = { true }/>
                 </div>
+                <h1> Player </h1>
                 <div className={styles["player-hands"]}>
                     { gameState.playerHands.map((hand: Hand, i : number) => 
                         <HandComponent 
@@ -88,14 +106,14 @@ export function Blackjack() {
                     )}
                 </div>
                 <div className = { styles["blackjack-hand-buttons"] }>
-                    <Button isActive = { !gameState.dealerTurn } onClick = { handleDeal } > Hit </Button>
+                    <Button isActive = { !Util.isDealerTurn(gameState.phase) } onClick = { handleDeal } > Hit </Button>
                     <Button 
-                        isActive = { !gameState.dealerTurn && Util.canSplit(gameState) } 
+                        isActive = { !Util.isDealerTurn(gameState.phase) && Util.canSplit(gameState) } 
                         onClick = { handleSplit } 
                     > 
                         Split 
                     </Button>
-                    <Button isActive = { !gameState.dealerTurn } onClick = { handleStay } > Stay </Button>
+                    <Button isActive = { !Util.isDealerTurn(gameState.phase) } onClick = { handleStay } > Stay </Button>
                 </div>
             </div>
         </div>

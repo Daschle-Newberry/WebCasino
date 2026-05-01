@@ -47,6 +47,21 @@
     overflow: hidden;
 }
 
+.blackjack-dealer-hand {
+    display: flex;
+    flex-direction: column;
+   
+    width: 300px;
+    min-height: 100px;
+    border: 2px solid white;
+
+    justify-items: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+
 .blackjack-hand-active {
     border: 2px dotted white;
 }

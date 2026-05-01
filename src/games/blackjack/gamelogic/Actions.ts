@@ -1,4 +1,4 @@
-import { Card, Hand, GameState } from "./Types" 
+import { Card, Hand, GameState, GamePhase } from "./Types" 
 import { handValue, canSplit, shuffle } from "./Utils";
 
 export function getDeck(): Card[] {
@@ -22,6 +22,10 @@ export function getDeck(): Card[] {
 }
 
 export function dealCard(prev: GameState): GameState {
+    const newActiveHand: number = prev.playerHands[prev.activeHand].isDone ? prev.activeHand + 1 : prev.activeHand;
+
+    if(newActiveHand > prev.playerHands.length) return prev;
+
     const newDeck = [...prev.deck]
     const newCard = newDeck.pop();
 
@@ -30,15 +34,14 @@ export function dealCard(prev: GameState): GameState {
     const newHands = [...prev.playerHands]
 
     const newHand = {
-        cards: [...newHands[prev.activeHand].cards],
+        cards: [...newHands[newActiveHand].cards],
         isDone: false
     };
 
     newHand.cards.push(newCard);
-    newHands[prev.activeHand] = newHand;
+    newHands[newActiveHand] = newHand;
     newHand.isDone = handValue(newHand) >= 21; 
 
-    const newActiveHand: number = newHand.isDone ? prev.activeHand + 1 : prev.activeHand;
     return (
         {
         ...prev,
@@ -67,13 +70,11 @@ export function stayHand(prev: GameState): GameState {
         newActiveHand++;
     }
 
-
-
     return {
         ...prev,
         playerHands: newHands,
         activeHand: newActiveHand,
-        dealerTurn: isDealerTurn,
+        phase: isDealerTurn ? GamePhase.DEALERTURN : GamePhase.PLAYERTURN,
     }
 }
 
@@ -109,4 +110,36 @@ export function splitHand(prev: GameState): GameState {
         playerHands: newHands
         }
     )
+}
+
+export function changeTurn(prev: GameState): GameState {
+    return {
+        ...prev,
+        phase: GamePhase.DEALERTURN
+    }
+}
+
+export function dealerChoice(prev: GameState): GameState {
+    const newDeck = [...prev.deck]
+    const newCard = newDeck.pop();
+
+    if(newCard == undefined) throw new Error("Out of cards!");
+    
+
+    const newHand = {
+        cards: [...prev.dealerHand.cards],
+        isDone: false
+    };
+
+    newHand.cards.push(newCard);
+    newHand.isDone = handValue(newHand) >= 21; 
+
+    return (
+        {
+        ...prev,
+        deck: newDeck,
+        dealerHand: newHand,
+        phase: handValue(newHand) >= 17 ? GamePhase.GAMEOVER : GamePhase.DEALERTURN
+        }
+    );
 }
