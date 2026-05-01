@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { Blackjack } from "./games/blackjack/Blackjack";
 import { MainMenu, MenuButton } from "./menu/MainMenu";
 import { RoulettePage } from "./games/roulette/roulette";
+import { Slots } from "./games/slots/Slots";
 
 import "./global.module.css";
 
@@ -32,6 +33,7 @@ root.render(
         />
         <Route path="/blackjack" element={<Blackjack />} />
         <Route path="/roulette" element={<RoulettePage />} />
+        <Route path="/slots" element={<Slots />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

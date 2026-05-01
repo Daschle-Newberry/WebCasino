@@ -8,7 +8,7 @@ import MainStyles from "../../menu/main-menu.module.css"
 import SlotStyles from "./slots.module.css"
 
 
-interface SlotButtonProps {
+interface SlotProps {
     link: string;
     text: string;
     children?: ReactNode;
@@ -18,7 +18,7 @@ interface SlotButtonProps {
 
 
 
-export function PageButton({ link, text, children, btnWidth, fSize}: SlotButtonProps ) {
+export function PageButton({ link, text, children, btnWidth, fSize}: SlotProps ) {
 
     console.log("SlotStyles:", SlotStyles);
 
@@ -31,18 +31,31 @@ export function PageButton({ link, text, children, btnWidth, fSize}: SlotButtonP
 
 
 
-export function GambleButton() {
-    console.log(Math.random()*100)
+
+class GambleState {
+    num: number = 0;
 }
 
+export class Slots extends Component<{}, GambleState> {
 
-export class Slots extends Component {
+    constructor(props: SlotProps) {
+        super({})
+        this.state = new GambleState();
+        this.GambleButton = this.GambleButton.bind(this);
+    }
+
+    GambleButton() {
+        let newState = new GambleState();
+        newState.num = Math.floor(Math.random() * 100);
+        this.setState( newState );
+    }
+
     override render(): ReactNode {
         return <div className = {MainStyles['main-menu-page']}> 
             <div>
-            <p>testing testing 1 2 1 2</p>
+            <p>You got {this.state.num} </p>
             <PageButton text="Main Menu" link="/" btnWidth={150} fSize={20} />
-            <button onClick={GambleButton}>Gamble!</button>
+            <button onClick={this.GambleButton}>Gamble!</button>
             </div>
         </div>
     }
