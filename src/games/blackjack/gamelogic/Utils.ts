@@ -36,3 +36,17 @@ export function handValue(hand: Hand): number {
 export function isDealerTurn(phase: GamePhase): boolean {
     return phase === GamePhase.DEALERTURN;
 }
+
+export function getPayout(playerHand: Hand, dealerHand: Hand) {
+    const playerHandValue: number = handValue(playerHand);
+    const dealerHandValue: number = handValue(dealerHand);
+    if(playerHandValue > 21) return -2 * playerHand.bet;
+    if(dealerHandValue > 21) return 2 * playerHand.bet;
+    else if(dealerHandValue > playerHandValue) {
+        return -2 * playerHand.bet;
+    } else if (playerHandValue > dealerHandValue) {
+        return 2 * playerHand.bet;
+    } else {
+        return 0;
+    }
+}

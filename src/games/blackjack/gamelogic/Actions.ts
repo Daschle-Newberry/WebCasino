@@ -1,5 +1,5 @@
 import { Card, Hand, GameState, GamePhase } from "./Types" 
-import { handValue, canSplit, shuffle } from "./Utils";
+import { handValue, canSplit, shuffle, getPayout } from "./Utils";
 
 export function getDeck(): Card[] {
     const start: number = 0x1F0A1;
@@ -20,7 +20,15 @@ export function getDeck(): Card[] {
     shuffle(cards);
     return cards;
 }
-
+export function getIntialState(prev: GameState): GameState {
+    return {
+            deck: getDeck(),
+            playerHands: [{cards: [], isDone: false, bet: 100, payout: 0}],
+            activeHand: 0,
+            dealerHand: {cards: [], isDone: false, bet: 0, payout: 0},
+            phase: GamePhase.BETTING
+        }
+}
 export function dealCard(prev: GameState): GameState {
     const newActiveHand: number = prev.playerHands[prev.activeHand].isDone ? prev.activeHand + 1 : prev.activeHand;
 
@@ -35,7 +43,9 @@ export function dealCard(prev: GameState): GameState {
 
     const newHand = {
         cards: [...newHands[newActiveHand].cards],
-        isDone: false
+        isDone: false,
+        bet: newHands[newActiveHand].bet,
+        payout: 0
     };
 
     newHand.cards.push(newCard);
@@ -93,12 +103,12 @@ export function splitHand(prev: GameState): GameState {
     if(!cardA2 || !cardB2) throw new Error("Illegal state, deck is empty");
 
     const handA = {...newHands[prev.activeHand]};
-    const handB = {cards: [cardB1,cardB2], isDone: false}
+    const handB = {cards: [cardB1,cardB2], isDone: false, bet: handA.bet, payout: 0}
     
     handA.cards = [cardA1, cardA2];
 
-    handA.isDone = handValue(handA) >= 21;
-    handB.isDone = handValue(handB) >= 21;
+    handA.isDone = handValue(handA) >= 21
+    handB.isDone = handValue(handB) >= 21
 
     newHands[prev.activeHand] = handA;
     newHands.push(handB);
@@ -128,11 +138,14 @@ export function dealerChoice(prev: GameState): GameState {
 
     const newHand = {
         cards: [...prev.dealerHand.cards],
-        isDone: false
+        isDone: false,
+        bet: 0,
+        payout: 0,
     };
 
     newHand.cards.push(newCard);
-    newHand.isDone = handValue(newHand) >= 21; 
+
+    newHand.isDone = handValue(newHand) >= 17; 
 
     return (
         {
@@ -142,4 +155,20 @@ export function dealerChoice(prev: GameState): GameState {
         phase: handValue(newHand) >= 17 ? GamePhase.GAMEOVER : GamePhase.DEALERTURN
         }
     );
+}
+
+export function computePayouts(prev: GameState): GameState {
+    const newHands: Hand[] = []
+
+    prev.playerHands.forEach((h: Hand) => {
+        let newHand: Hand = {...h}
+        h.payout = getPayout(h, prev.dealerHand);
+
+        newHands.push(newHand);
+    })
+
+    return {
+        ...prev,
+        playerHands: newHands
+    }
 }
