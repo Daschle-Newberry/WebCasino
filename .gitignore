@@ -10,5 +10,5 @@
 !public/
 !public/**
 
-
 src/**/*.jsx
+src/**/*.js
