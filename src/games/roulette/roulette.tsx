@@ -224,13 +224,13 @@ const Gamble = () => {
         else{
             console.log("Better luck next time.");
             setWinner("Better luck next time.")
-            setBank(bank - numBet);
+            setBank(bank - Math.abs(numBet));
         }
     }
 
     function winMoney(){
         // adjust to have actual payout values
-        let payout = numBet;
+        let payout = Math.abs(numBet);
 
         // Inside bets 
 
@@ -281,7 +281,7 @@ const Gamble = () => {
                 <button
                     onClick={handleClick}
                 >
-                    Let it ride!
+                    Spin Big, Win Big!
                 </button>
             </div>
             <div>
@@ -377,6 +377,71 @@ export function RoulettePage(){
                 </h1>
             </div>
             <div className={styles["roulette-main-page"]}>
+                <table>
+                    <td>
+                        <table>
+                            <tr><th className={styles["betStyle"]}>Inside Bets</th></tr>
+                            <tr>
+                                <th>Bet Type</th>
+                                <th>Payout</th>
+                            </tr>
+                            <tr>
+                                <td>Straight Up</td>
+                                <td>35 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Split</td>
+                                <td>17 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Triple</td>
+                                <td>11 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Quad</td>
+                                <td>8 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Fiver</td>
+                                <td>6 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Sixer</td>
+                                <td>5 : 1</td>
+                            </tr>
+                        </table>
+                    </td>
+                
+                    <td>
+                        <table>
+                            <tr><th className={styles["betStyle"]}>Outside Bets</th></tr>
+                            <tr>
+                                <th>Bet Type</th>
+                                <th>Payout</th>
+                            </tr>
+                            <tr>
+                                <td>Column</td>
+                                <td>2 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Dozen</td>
+                                <td>2 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Low / High</td>
+                                <td>2 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Odd / Even</td>
+                                <td>2 : 1</td>
+                            </tr>
+                            <tr>
+                                <td>Red / Black</td>
+                                <td>2 : 1</td>
+                            </tr>
+                        </table>
+                    </td>
+                </table>
                 {Roulette()}
             </div>
         </div>
