@@ -20,12 +20,22 @@ export function getDeck(): Card[] {
     shuffle(cards);
     return cards;
 }
-export function getIntialState(prev: GameState): GameState {
+export function getIntialState(): GameState {
+    const deck: Card[] = getDeck();
+    const cards: Card[] = [];
+
+    for(let i = 0; i < 4; i++) {
+        const newCard: Card | undefined = deck.pop();
+        if(newCard == undefined) throw new Error("Illegal state, deck is empty");
+        cards.push(newCard);
+    }
+
+    cards[3].hide();
     return {
-            deck: getDeck(),
-            playerHands: [{cards: [], isDone: false, bet: 100, payout: 0}],
+            deck: deck,
+            playerHands: [{cards: cards.splice(0,2), isDone: false, bet: 100, payout: 0}],
             activeHand: 0,
-            dealerHand: {cards: [], isDone: false, bet: 0, payout: 0},
+            dealerHand: {cards: cards.splice(0,2), isDone: false, bet: 0, payout: 0},
             phase: GamePhase.BETTING
         }
 }
@@ -71,20 +81,12 @@ export function stayHand(prev: GameState): GameState {
 
     newHands[prev.activeHand] = newHand;
 
-    let isDealerTurn: boolean = false;
-    let newActiveHand: number = prev.activeHand;
-
-    if(prev.activeHand == prev.playerHands.length - 1) {
-        isDealerTurn = true;
-    } else {
-        newActiveHand++;
-    }
-
+    let endTurn: boolean = prev.activeHand == prev.playerHands.length - 1;
+ 
     return {
         ...prev,
         playerHands: newHands,
-        activeHand: newActiveHand,
-        phase: isDealerTurn ? GamePhase.DEALERTURN : GamePhase.PLAYERTURN,
+        activeHand: endTurn ? prev.activeHand : prev.activeHand + 1,
     }
 }
 
@@ -123,13 +125,31 @@ export function splitHand(prev: GameState): GameState {
 }
 
 export function changeTurn(prev: GameState): GameState {
+    const newDealerHand = {...prev.dealerHand};
+    const newDealerCards = [...newDealerHand.cards];
+
+    newDealerCards.forEach((c: Card) => c.unhide());
     return {
         ...prev,
+        dealerHand: newDealerHand,
         phase: GamePhase.DEALERTURN
     }
 }
 
 export function dealerChoice(prev: GameState): GameState {
+    if(handValue(prev.dealerHand) >= 17) {
+        const newHand = {
+            cards: [...prev.dealerHand.cards],
+            isDone: true,
+            bet: 0,
+            payout: 0,
+        };
+        return {
+            ...prev,
+            dealerHand: newHand,
+            phase: GamePhase.GAMEOVER,
+        }
+    }
     const newDeck = [...prev.deck]
     const newCard = newDeck.pop();
 
