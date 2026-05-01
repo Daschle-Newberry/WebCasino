@@ -38,6 +38,7 @@ export enum CardRank {
 }
 
 export enum GamePhase {
+    BETTING,
     PLAYERTURN,
     DEALERTURN,
     GAMEOVER
@@ -47,6 +48,8 @@ export enum GamePhase {
 export type Hand = {
     cards: Card[],
     isDone: boolean
+    bet: number;
+    payout: number;
 }
 
 export type GameState = {
