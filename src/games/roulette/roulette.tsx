@@ -1,6 +1,6 @@
 import React, { StrictMode, Component, ReactNode } from "react";
-import { createRoot } from "react-dom/client";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { linkedListNode , linkedList } from "./linkedlist"
 
 import styles from "./roulette.module.css"
@@ -375,6 +375,7 @@ export function RoulettePage(){
                 <h1 className={styles["roulette-title"]}>
                     Welcome to the Roulette table!
                 </h1>
+                <Link to="/" className={styles["main-menu-button"]}>Main Menu</Link> 
             </div>
             <div className={styles["roulette-main-page"]}>
                 <table>
