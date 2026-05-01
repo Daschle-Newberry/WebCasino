@@ -5,19 +5,37 @@ export class Card {
 
     private codepoint: number;
 
-	public constructor(suit: number, rank: number, value: number, codepoint: number) {
+    private isHidden: boolean;
+
+	public constructor(suit: number, rank: number, value: number, codepoint: number, isHidden: boolean = false) {
 		this.suit = suit;
 		this.rank = rank;``
 		this.value = value;
         this.codepoint = codepoint;
+        this.isHidden = isHidden;
 	}
 
     public getFace(): string {
+        if(this.isHidden) {
+            return String.fromCodePoint(0x1F0A0);
+        }
         return String.fromCodePoint(this.codepoint);
     }
 
     public equals(other: Card): boolean {
         return this.rank === other.rank;
+    }
+
+    public hide(): void {
+        this.isHidden = true;
+    }
+
+    public unhide(): void {
+        this.isHidden = false;
+    }
+
+    public getIsHidden(): boolean {
+        return this.isHidden;
     }
 }
 
