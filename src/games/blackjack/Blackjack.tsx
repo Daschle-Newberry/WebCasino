@@ -20,9 +20,10 @@ function Button({  isActive, onClick, children}: {
     )
 }
 
-function HandComponent({ hand, showPayout, active = false, isDealer = false}: {
+function HandComponent({ hand, showPayout, showScore = true, active = false, isDealer = false}: {
      hand: Hand,
      showPayout: boolean; 
+     showScore?: boolean
      active?: boolean,
      isDealer?: boolean,
 }) {
@@ -33,8 +34,8 @@ function HandComponent({ hand, showPayout, active = false, isDealer = false}: {
     if(active && !isDealer) style.push(styles["blackjack-hand-active"]);
     if(hand.isDone) style.push(styles["blackjack-hand-done"]);
 
-    if(value > 21) style.push(styles["blackjack-hand-bust"]);
-    else if(value == 21) style.push(styles["blackjack-hand-blackjack"]);
+    if(value > 21 && showScore) style.push(styles["blackjack-hand-bust"]);
+    else if(value == 21 && showScore) style.push(styles["blackjack-hand-blackjack"]);
 
     return(
         <div className={styles["blackjack-hand-wrapper"]}>
@@ -48,7 +49,7 @@ function HandComponent({ hand, showPayout, active = false, isDealer = false}: {
                 ))}
                 </div>
             </div>
-            <p className={styles["blackjack-hand-score"]}>{Util.handValue(hand)}</p>
+            <p className={styles["blackjack-hand-score"]}>{showScore ? Util.handValue(hand) : "?"}</p>
         </div>
     );    
 }
@@ -57,12 +58,12 @@ export function Blackjack() {
     const [betInput, setBetInput] = useState<string>("100");
 
     const [gameState, setGameState] = useState<GameState>({
-        deck: Actions.getDeck(),
-        playerHands: [{cards: [], isDone: false, bet: 100, payout: 0}],
-        activeHand: 0,
-        dealerHand: {cards: [], isDone: false, bet: 0, payout: 0},
-        phase: GamePhase.BETTING
-    })
+            deck: [],
+            playerHands: [{cards: [], isDone: false, bet: 100, payout: 0}],
+            activeHand: 0,
+            dealerHand: {cards: [], isDone: false, bet: 0, payout: 0},
+            phase: GamePhase.BETTING
+        });
     
     useEffect(() => {
         if(gameState.phase !== GamePhase.DEALERTURN) return;
@@ -90,17 +91,22 @@ export function Blackjack() {
     function handleStart(): void {
         if(gameState.phase !== GamePhase.BETTING) return;
         setGameState(prev => {
-            prev.playerHands[0].bet = parseInt(betInput);
-            return {
-                ...prev,
-                phase: GamePhase.PLAYERTURN
-            }
+            const initial = Actions.getIntialState();
+            initial.playerHands[0].bet = parseInt(betInput);
+            initial.phase = GamePhase.PLAYERTURN;
+            return initial;
         })
 
     }
     
     function handRestart(): void {
-        setGameState(prev => Actions.getIntialState(prev));
+        setGameState({
+            deck: [],
+            playerHands: [{cards: [], isDone: false, bet: 100, payout: 0}],
+            activeHand: 0,
+            dealerHand: {cards: [], isDone: false, bet: 0, payout: 0},
+            phase: GamePhase.BETTING
+        });
     }
 
     function handleDeal(): void {
@@ -138,7 +144,7 @@ export function Blackjack() {
             </h1>
             <div className={styles["blackjack-table"]}>
                 <div className={styles["dealer-hand"]}>
-                    <HandComponent hand = { gameState.dealerHand } showPayout = { false} isDealer = { true }/>
+                    <HandComponent hand = { gameState.dealerHand } showPayout = { false } showScore = { !(gameState.phase == GamePhase.PLAYERTURN) }isDealer = { true }/>
                 </div>
                 <div className={styles["player-hands"]}>
                     { gameState.playerHands.map((hand: Hand, i : number) => 
