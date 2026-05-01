@@ -4,6 +4,8 @@ import { createRoot } from "react-dom/client";
 import { Blackjack } from "./games/blackjack/Blackjack";
 import { MainMenu, MenuButton } from "./menu/MainMenu";
 import { RoulettePage } from "./games/roulette/roulette";
+import { Slots } from "./games/slots/Slots";
+import { Baccarat } from "./games/baccarat/Baccarat";
 
 import "./global.module.css";
 
@@ -26,12 +28,14 @@ root.render(
               <MenuButton text="Slots" link="/slots" />
               <MenuButton text="Roulette" link="/roulette" />
               <MenuButton text="Blackjack" link="/blackjack" />
-              <MenuButton text="Craps" link="/craps" />
+              <MenuButton text="Baccarat" link="/baccarat" />
             </MainMenu>
           }
         />
         <Route path="/blackjack" element={<Blackjack />} />
         <Route path="/roulette" element={<RoulettePage />} />
+        <Route path="/slots" element={<Slots />} />
+        <Route path="/baccarat" element={<Baccarat />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

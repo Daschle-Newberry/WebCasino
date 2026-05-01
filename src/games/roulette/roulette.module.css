@@ -1,28 +1,27 @@
 /**https://react.dev/learn/tutorial-tic-tac-toe#adding-time-travel*/
 
 .roulette-main-page {
+  min-width: 600px;
   width: 100vw;   
   height: 100vh;
   display: table-cell;
   justify-content: center; 
   align-items: center;
-  vertical-align: middle;
+  vertical-align: top;
 
   background: radial-gradient(
       circle at center,
       rgb(16, 120, 43),
       rgb(7, 61, 21)
   );
+  
 }
 
 .roulette-main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
 
-  padding: 40px 30px;
-  border-radius: 20px;
   background: rgba(16, 120, 43);
 
   box-shadow: 5px 10px 40px rgba(0,0,0,.8);
@@ -123,14 +122,8 @@
   width: 50px;
 }
 
-.board-row:after {
-  clear: both;
-  content: '';
-  display: table;
-}
-
 .betTab {
-  margin-top: 50px;
+  margin-top: 20px;
   font-size: 20px;
   font-weight: 800;
   
@@ -146,4 +139,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+table {
+  width: 100%;
+}
+
+td, th{
+  padding: 4px;
+  color: #fff;
+}
+
+.betStyle{
+  text-align: right;
+  font-weight: 40000;
+}
+
+tr {
+  text-align: center;
 }
