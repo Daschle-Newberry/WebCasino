@@ -1,4 +1,4 @@
-import { GameState, Card, Hand, CardRank} from "./Types"
+import { GameState, GamePhase, Card, Hand, CardRank} from "./Types"
 
 export function shuffle(cards: Card[]): void { 
         // Fisher-Yates shuffle
@@ -30,4 +30,9 @@ export function handValue(hand: Hand): number {
 
         const requiredAces =  Math.max(Math.ceil((points/10) - 2.1), 0);
 		return points - Math.min(requiredAces,aces) * 10;
+}
+
+
+export function isDealerTurn(phase: GamePhase): boolean {
+    return phase === GamePhase.DEALERTURN;
 }
