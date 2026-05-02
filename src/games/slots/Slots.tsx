@@ -1,12 +1,9 @@
-import React, {StrictMode, Component, ReactNode } from "react";
-import { createRoot } from "react-dom/client";
-import { MainMenu, MenuButton } from "../../menu/MainMenu";
+import React, {Component, ReactNode } from "react";
 import { Link } from 'react-router-dom';
 
 
 import MainStyles from "../../menu/main-menu.module.css"
 import SlotStyles from "./slots.module.css"
-import { wrap } from "node:module";
 
 
 interface PageProps {
